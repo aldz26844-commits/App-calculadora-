@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Pro Calculator</title>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(-45deg,
+        #080b24, #172b65, #4b176b, #092e49);
+    background-size: 400% 400%;
+    animation: gradient 12s ease infinite;
+    color: white;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.calculator {
+    width: 100%;
+    max-width: 390px;
+    padding: 25px;
+    border-radius: 28px;
+    background: rgba(10, 15, 35, 0.82);
+    border: 1px solid rgba(255,255,255,0.18);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5),
+                0 0 25px rgba(0,210,255,0.15);
+    backdrop-filter: blur(18px);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.header h2 {
+    font-size: 21px;
+    letter-spacing: 3px;
+    color: #00eaff;
+}
+
+.header p {
+    color: #aab9d8;
+    font-size: 11px;
+    margin-top: 5px;
+    letter-spacing: 2px;
+}
+
+.clock {
+    background: #050d1c;
+    border: 1px solid #153a55;
+    padding: 14px;
+    border-radius: 15px;
+    text-align: center;
+    margin-bottom: 18px;
+    box-shadow: inset 0 0 15px #001d36;
+}
+
+#time {
+    font-family: monospace;
+    font-size: 32px;
+    font-weight: bold;
+    color: #00f7ff;
+    text-shadow: 0 0 12px #00d9ff;
+    letter-spacing: 3px;
+}
+
+#date {
+    font-size: 12px;
+    color: #8ca9c9;
+    margin-top: 5px;
+}
+
+.display {
+    background: #020916;
+    border-radius: 15px;
+    padding: 18px;
+    margin-bottom: 18px;
+    border: 1px solid #163b54;
+    box-shadow: inset 0 0 20px #001b31;
+    text-align: right;
+    overflow: hidden;
+}
+
+#expression {
+    color: #6d91a9;
+    min-height: 22px;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+#result {
+    font-family: monospace;
+    font-size: clamp(28px, 9vw, 38px);
+    color: #00ffb3;
+    text-shadow: 0 0 12px rgba(0,255,179,.5);
+    overflow-wrap: anywhere;
+    min-height: 45px;
+}
+
+.buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 11px;
+}
+
+button {
+    height: 65px;
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 15px;
+    background: linear-gradient(145deg,#172843,#10192d);
+    color: white;
+    font-size: 22px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: .2s;
+    box-shadow: 0 5px 12px rgba(0,0,0,.3);
+}
+
+button:hover {
+    background: #164568;
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px #00cfff;
+}
+
+button:active {
+    transform: scale(.94);
+}
+
+.operator {
+    color: #00eaff;
+    background: #10334a;
+}
+
+.clear {
+    color: #ff637d;
+    background: #46202f;
+}
+
+.equal {
+    background: linear-gradient(135deg,#00bfa5,#0079cf);
+    color: white;
+    grid-column: span 2;
+}
+
+.zero {
+    grid-column: span 2;
+}
+
+.footer {
+    text-align: center;
+    color: #7894ae;
+    font-size: 10px;
+    margin-top: 20px;
+    letter-spacing: 2px;
+}
+
+@media(max-width:350px) {
+    .calculator { padding: 16px; }
+    button { height: 55px; }
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+
+    <div class="header">
+        <h2>CALCULATOR PRO</h2>
+        <p>DIGITAL SMART SYSTEM</p>
+    </div>
+
+    <div class="clock">
+        <div id="time">00:00:00</div>
+        <div id="date">Carregando data...</div>
+    </div>
+
+    <div class="display">
+        <div id="expression">PRONTO PARA CALCULAR</div>
+        <div id="result">0</div>
+    </div>
+
+    <div class="buttons">
+        <button class="clear" onclick="clearCalc()">AC</button>
+        <button class="operator" onclick="del()">DEL</button>
+        <button class="operator" onclick="percent()">%</button>
+        <button class="operator" onclick="add('/')">÷</button>
+
+        <button onclick="add('7')">7</button>
+        <button onclick="add('8')">8</button>
+        <button onclick="add('9')">9</button>
+        <button class="operator" onclick="add('*')">×</button>
+
+        <button onclick="add('4')">4</button>
+        <button onclick="add('5')">5</button>
+        <button onclick="add('6')">6</button>
+        <button class="operator" onclick="add('-')">−</button>
+
+        <button onclick="add('1')">1</button>
+        <button onclick="add('2')">2</button>
+        <button onclick="add('3')">3</button>
+        <button class="operator" onclick="add('+')">+</button>
+
+        <button class="zero" onclick="add('0')">0</button>
+        <button onclick="add('.')">.</button>
+        <button class="equal" onclick="calculate()">=</button>
+    </div>
+
+    <div class="footer">
+        DIGITAL PRO • VERSION 1.0
+    </div>
+
+</div>
+
+<script>
+let expression = '';
+let justCalculated = false;
+
+const result = document.getElementById('result');
+const expressionDisplay = document.getElementById('expression');
+
+function updateClock() {
+    const now = new Date();
+
+    document.getElementById('time').textContent =
+        now.toLocaleTimeString('pt-BR', {
+            hour12: false
+        });
+
+    document.getElementById('date').textContent =
+        now.toLocaleDateString('pt-BR', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+        });
+}
+
+setInterval(updateClock, 1000);
+updateClock();
+
+function add(value) {
+    if (justCalculated && /[0-9.]/.test(value)) {
+        expression = '';
+    }
+    justCalculated = false;
+
+    if (value === '.') {
+        const current = expression.split(/[+\-*/]/).pop();
+        if (current.includes('.')) return;
+    }
+
+    expression += value;
+    result.textContent = expression || '0';
+    expressionDisplay.textContent = 'OPERAÇÃO';
+}
+
+function clearCalc() {
+    expression = '';
+    result.textContent = '0';
+    expressionDisplay.textContent = 'PRONTO PARA CALCULAR';
+    justCalculated = false;
+}
+
+function del() {
+    expression = expression.slice(0, -1);
+    result.textContent = expression || '0';
+}
+
+function calculate() {
+    if (!expression) return;
+
+    try {
+        if (!/^[0-9+\-*/.() ]+$/.test(expression)) {
+            throw new Error('Expressão inválida');
+        }
+
+        const answer = Function(
+            '"use strict"; return (' + expression + ')'
+        )();
+
+        if (!Number.isFinite(answer)) {
+            throw new Error('Resultado inválido');
+        }
+
+        expressionDisplay.textContent = expression + ' =';
+
+        expression = String(
+            Number(answer.toPrecision(12))
+        );
+
+        result.textContent = expression;
+        justCalculated = true;
+
+    } catch {
+        result.textContent = 'ERRO';
+        expressionDisplay.textContent = 'OPERAÇÃO INVÁLIDA';
+        expression = '';
+        justCalculated = false;
+    }
+}
+
+function percent() {
+    if (!expression) return;
+
+    try {
+        const value = Function(
+            '"use strict"; return (' + expression + ')'
+        )();
+
+        if (!Number.isFinite(value)) throw new Error();
+
+        expression = String(value / 100);
+        result.textContent = expression;
+        expressionDisplay.textContent = 'PORCENTAGEM';
+        justCalculated = true;
+
+    } catch {
+        result.textContent = 'ERRO';
+        expression = '';
+    }
+}
+
+// Suporte ao teclado físico
+document.addEventListener('keydown', (e) => {
+    if (/^[0-9.]$/.test(e.key)) add(e.key);
+    else if (['+','-','*','/'].includes(e.key)) add(e.key);
+    else if (e.key === 'Enter' || e.key === '=') calculate();
+    else if (e.key === 'Backspace') del();
+    else if (e.key === 'Escape') clearCalc();
+    else if (e.key === '%') percent();
+});
+</script>
+
+</body>
+</html>
